@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../features/auth/providers/auth_provider.dart';
-import '../models/location_models.dart';
+import '../../../features/auth/providers/auth_provider.dart';
+import '../location_models.dart';
 
 class LocationHierarchySelector extends StatelessWidget {
   final bool isRequired;

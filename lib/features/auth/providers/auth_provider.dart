@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import '../../core/services/auth_service.dart';
+import '../../shared/models/user_model.dart';
 
 enum AuthStatus {
   initial,
@@ -8,22 +10,11 @@ enum AuthStatus {
   error,
 }
 
-// Mock User class for testing without Supabase
-class MockUser {
-  final String id;
-  final String email;
-  final Map<String, dynamic>? userMetadata;
-
-  MockUser({
-    required this.id,
-    required this.email,
-    this.userMetadata,
-  });
-}
-
 class AuthProvider extends ChangeNotifier {
+  final AuthService _authService;
+  
   AuthStatus _status = AuthStatus.initial;
-  MockUser? _user;
+  UserModel? _user;
   String? _errorMessage;
 
   // Mock credentials for testing
@@ -31,11 +22,12 @@ class AuthProvider extends ChangeNotifier {
   static const String _mockPassword = 'test123';
 
   AuthStatus get status => _status;
-  MockUser? get user => _user;
+  UserModel? get user => _user;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _status == AuthStatus.authenticated;
+  bool get isLoading => _status == AuthStatus.loading;
 
-  AuthProvider() {
+  AuthProvider(this._authService) {
     _initialize();
   }
 
@@ -57,10 +49,15 @@ class AuthProvider extends ChangeNotifier {
       
       // Mock authentication logic for testing
       if (email == _mockEmail && password == _mockPassword) {
-        _user = MockUser(
+        // Create a mock UserModel
+        _user = UserModel(
           id: '123',
           email: email,
-          userMetadata: {'full_name': 'Test User'},
+          name: 'Test User',
+          role: 'worker',
+          isActive: true,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         );
         _status = AuthStatus.authenticated;
         _errorMessage = null;
@@ -77,9 +74,9 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> signUp({
+    required String name,
     required String email,
     required String password,
-    String? fullName,
   }) async {
     try {
       _setLoading();
@@ -89,10 +86,14 @@ class AuthProvider extends ChangeNotifier {
       
       // Mock registration logic for testing
       if (email.isNotEmpty && password.length >= 6) {
-        _user = MockUser(
+        _user = UserModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
           email: email,
-          userMetadata: {'full_name': fullName ?? 'User'},
+          name: name,
+          role: 'worker',
+          isActive: true,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
         );
         _status = AuthStatus.authenticated;
         _errorMessage = null;
