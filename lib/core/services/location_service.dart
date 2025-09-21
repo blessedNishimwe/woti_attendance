@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../shared/models/location_models.dart';
 import '../../config/supabase_config.dart';
@@ -74,12 +75,12 @@ class LocationService {
     // Simplified distance calculation in meters
     // In production, use a proper geolocation library
     const double earthRadius = 6371000; // Earth radius in meters
-    final double dLat = (lat2 - lat1) * (3.14159 / 180);
-    final double dLon = (lon2 - lon1) * (3.14159 / 180);
+    final double dLat = (lat2 - lat1) * (pi / 180);
+    final double dLon = (lon2 - lon1) * (pi / 180);
     
     final double a = (dLat / 2) * (dLat / 2) +
-        (dLon / 2) * (dLon / 2) * (lat1 * 3.14159 / 180).cos() * (lat2 * 3.14159 / 180).cos();
-    final double c = 2 * (a.sqrt()).asin();
+        (dLon / 2) * (dLon / 2) * cos(lat1 * pi / 180) * cos(lat2 * pi / 180);
+    final double c = 2 * asin(sqrt(a));
     
     return earthRadius * c;
   }
