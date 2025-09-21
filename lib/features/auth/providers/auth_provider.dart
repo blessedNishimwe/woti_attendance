@@ -1,252 +1,169 @@
-// lib/features/auth/providers/auth_provider.dart
-import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../core/services/auth_service.dart';
-import '../../../core/services/location_hierarchy_service.dart';
-import '../../../shared/models/user_model.dart';
-import '../../../shared/models/location_models.dart';
+import 'package:flutter/foundation.dart';
+
+enum AuthStatus {
+  initial,
+  loading,
+  authenticated,
+  unauthenticated,
+  error,
+}
+
+// Mock User class for testing without Supabase
+class MockUser {
+  final String id;
+  final String email;
+  final Map<String, dynamic>? userMetadata;
+
+  MockUser({
+    required this.id,
+    required this.email,
+    this.userMetadata,
+  });
+}
 
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authService;
-  final LocationHierarchyService _locationService = LocationHierarchyService();
-  
-  UserModel? _user;
-  bool _isLoading = false;
+  AuthStatus _status = AuthStatus.initial;
+  MockUser? _user;
   String? _errorMessage;
-  
-  // Location data for registration
-  List<Region> _regions = [];
-  List<Council> _councils = [];
-  List<Facility> _facilities = [];
-  
-  Region? _selectedRegion;
-  Council? _selectedCouncil;
-  Facility? _selectedFacility;
 
-  AuthProvider(this._authService) {
-    _init();
-  }
+  // Mock credentials for testing
+  static const String _mockEmail = 'test@example.com';
+  static const String _mockPassword = 'test123';
 
-  // Getters
-  UserModel? get user => _user;
-  bool get isLoading => _isLoading;
+  AuthStatus get status => _status;
+  MockUser? get user => _user;
   String? get errorMessage => _errorMessage;
-  bool get isAuthenticated => _user != null;
-  
-  // Location getters
-  List<Region> get regions => _regions;
-  List<Council> get councils => _councils;
-  List<Facility> get facilities => _facilities;
-  Region? get selectedRegion => _selectedRegion;
-  Council? get selectedCouncil => _selectedCouncil;
-  Facility? get selectedFacility => _selectedFacility;
+  bool get isAuthenticated => _status == AuthStatus.authenticated;
 
-  void _init() {
-    _authService.authStateChanges.listen((AuthState state) async {
-      if (state.event == AuthChangeEvent.signedIn && state.session?.user != null) {
-        try {
-          _user = await _authService.getUserData(state.session!.user.id);
-        } catch (e) {
-          _errorMessage = e.toString();
-        }
-      } else if (state.event == AuthChangeEvent.signedOut) {
-        _user = null;
-        _clearLocationSelection();
-      }
-      _isLoading = false;
-      notifyListeners();
-    });
-    
-    // Load initial location data
-    _loadRegions();
+  AuthProvider() {
+    _initialize();
   }
 
-  // Authentication methods
-  Future<bool> signIn(String email, String password) async {
-    try {
-      _setLoading(true);
-      _clearError();
+  void _initialize() {
+    // For testing, start as unauthenticated
+    _status = AuthStatus.unauthenticated;
+    notifyListeners();
+  }
 
-      final user = await _authService.signInWithEmailAndPassword(email, password);
-      _user = user;
-      return user != null;
+  Future<bool> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      _setLoading();
+      
+      // Simulate API call delay
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Mock authentication logic for testing
+      if (email == _mockEmail && password == _mockPassword) {
+        _user = MockUser(
+          id: '123',
+          email: email,
+          userMetadata: {'full_name': 'Test User'},
+        );
+        _status = AuthStatus.authenticated;
+        _errorMessage = null;
+        notifyListeners();
+        return true;
+      } else {
+        _setError('Invalid email or password');
+        return false;
+      }
     } catch (e) {
       _setError(e.toString());
       return false;
-    } finally {
-      _setLoading(false);
     }
   }
 
-  Future<bool> register({
+  Future<bool> signUp({
     required String email,
     required String password,
-    required String name,
-    required String role,
-    String? facilityId,
+    String? fullName,
   }) async {
     try {
-      _setLoading(true);
-      _clearError();
-
-      final user = await _authService.createUserWithEmailAndPassword(
-        email, 
-        password, 
-        name, 
-        role,
-        facilityId: facilityId,
-      );
+      _setLoading();
       
-      _user = user;
-      return user != null;
+      // Simulate API call delay
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Mock registration logic for testing
+      if (email.isNotEmpty && password.length >= 6) {
+        _user = MockUser(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          email: email,
+          userMetadata: {'full_name': fullName ?? 'User'},
+        );
+        _status = AuthStatus.authenticated;
+        _errorMessage = null;
+        notifyListeners();
+        return true;
+      } else {
+        _setError('Registration failed');
+        return false;
+      }
     } catch (e) {
       _setError(e.toString());
       return false;
-    } finally {
-      _setLoading(false);
     }
   }
 
   Future<void> signOut() async {
     try {
-      _setLoading(true);
-      await _authService.signOut();
+      _setLoading();
+      
+      // Simulate API call delay
+      await Future.delayed(const Duration(milliseconds: 500));
+      
       _user = null;
-      _clearLocationSelection();
+      _status = AuthStatus.unauthenticated;
+      _errorMessage = null;
+      notifyListeners();
     } catch (e) {
       _setError(e.toString());
-    } finally {
-      _setLoading(false);
     }
   }
 
   Future<bool> resetPassword(String email) async {
     try {
-      _clearError();
-      await _authService.resetPassword(email);
-      return true;
+      _setLoading();
+      
+      // Simulate API call delay
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Mock password reset
+      if (email.isNotEmpty && email.contains('@')) {
+        _status = AuthStatus.unauthenticated;
+        _errorMessage = null;
+        notifyListeners();
+        return true;
+      } else {
+        _setError('Invalid email address');
+        return false;
+      }
     } catch (e) {
       _setError(e.toString());
       return false;
     }
   }
 
-  Future<bool> updateProfile({
-    String? name,
-    String? role,
-    String? facilityId,
-  }) async {
-    if (_user == null) return false;
-
-    try {
-      _setLoading(true);
-      _clearError();
-
-      await _authService.updateUserProfile(
-        userId: _user!.id,
-        name: name,
-        role: role,
-        facilityId: facilityId,
-      );
-
-      // Reload user data
-      _user = await _authService.getUserData(_user!.id);
-      return true;
-    } catch (e) {
-      _setError(e.toString());
-      return false;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
-  // Location management methods
-  Future<void> _loadRegions() async {
-    try {
-      _regions = await _locationService.getAllRegions();
-      notifyListeners();
-    } catch (e) {
-      print('Failed to load regions: $e');
-    }
-  }
-
-  Future<void> selectRegion(Region region) async {
-    _selectedRegion = region;
-    _selectedCouncil = null;
-    _selectedFacility = null;
-    _councils.clear();
-    _facilities.clear();
-    
-    try {
-      _councils = await _locationService.getCouncilsByRegion(region.id);
-    } catch (e) {
-      print('Failed to load councils: $e');
-    }
-    
-    notifyListeners();
-  }
-
-  Future<void> selectCouncil(Council council) async {
-    _selectedCouncil = council;
-    _selectedFacility = null;
-    _facilities.clear();
-    
-    try {
-      _facilities = await _locationService.getFacilitiesByCouncil(council.id);
-    } catch (e) {
-      print('Failed to load facilities: $e');
-    }
-    
-    notifyListeners();
-  }
-
-  void selectFacility(Facility facility) {
-    _selectedFacility = facility;
-    notifyListeners();
-  }
-
-  void _clearLocationSelection() {
-    _selectedRegion = null;
-    _selectedCouncil = null;
-    _selectedFacility = null;
-    _councils.clear();
-    _facilities.clear();
-    notifyListeners();
-  }
-
-  // Utility methods
-  void _setLoading(bool loading) {
-    _isLoading = loading;
-    notifyListeners();
-  }
-
-  void _setError(String error) {
-    _errorMessage = error;
-    notifyListeners();
-  }
-
-  void _clearError() {
+  void _setLoading() {
+    _status = AuthStatus.loading;
     _errorMessage = null;
     notifyListeners();
   }
 
+  void _setError(String error) {
+    _status = AuthStatus.error;
+    _errorMessage = error;
+    notifyListeners();
+  }
+
   void clearError() {
-    _clearError();
-  }
-
-  // Check if user has required facility assignment
-  bool get hasRequiredFacilityAssignment {
-    return _user?.facilityId != null;
-  }
-
-  // Get user's facility information
-  Future<Facility?> getUserFacility() async {
-    if (_user?.facilityId == null) return null;
-    
-    try {
-      return await _locationService.getFacilityById(_user!.facilityId!);
-    } catch (e) {
-      return null;
+    _errorMessage = null;
+    if (_status == AuthStatus.error) {
+      _status = _user != null ? AuthStatus.authenticated : AuthStatus.unauthenticated;
     }
+    notifyListeners();
   }
 }

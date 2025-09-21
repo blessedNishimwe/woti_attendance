@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woti Attendance - App Preview</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: #2563eb;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .screens {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 30px;
+        }
+        .screen {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .screen h3 {
+            color: #1e293b;
+            margin: 0 0 15px 0;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .screen-icon {
+            font-size: 1.5em;
+        }
+        .mockup {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 300px;
+        }
+        .form-field {
+            margin: 15px 0;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: #f9fafb;
+            color: #6b7280;
+        }
+        .button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        .button.secondary {
+            background: transparent;
+            color: #2563eb;
+            border: 1px solid #2563eb;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .action-card {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            color: #0369a1;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .check {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: #2563eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕐 Woti Attendance</h1>
+            <p>Flutter Authentication MVP - Visual Preview</p>
+        </div>
+
+        <div class="screens">
+            <!-- Login Screen -->
+            <div class="screen">
+                <h3><span class="screen-icon">🔐</span> Login Screen</h3>
+                <div class="mockup">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 4em; color: #2563eb;">🕐</div>
+                        <h2 style="color: #2563eb; margin: 10px 0;">Woti Attendance</h2>
+                        <p style="color: #6b7280;">Sign in to track your attendance</p>
+                    </div>
+                    <div class="form-field">📧 Email</div>
+                    <div class="form-field">🔒 Password</div>
+                    <button class="button">Sign In</button>
+                    <button class="button secondary">Don't have an account? Sign up</button>
+                    <button class="button secondary">Forgot Password?</button>
+                </div>
+                <ul class="feature-list">
+                    <li><span class="check">✓</span> Email/password validation</li>
+                    <li><span class="check">✓</span> Loading states</li>
+                    <li><span class="check">✓</span> Error handling</li>
+                    <li><span class="check">✓</span> Mock authentication</li>
+                </ul>
+            </div>
+
+            <!-- Register Screen -->
+            <div class="screen">
+                <h3><span class="screen-icon">📝</span> Registration Screen</h3>
+                <div class="mockup">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 3em; color: #2563eb;">👤</div>
+                        <h3 style="color: #2563eb; margin: 10px 0;">Join Woti Attendance</h3>
+                        <p style="color: #6b7280;">Create your account to get started</p>
+                    </div>
+                    <div class="form-field">👤 Full Name</div>
+                    <div class="form-field">📧 Email</div>
+                    <div class="form-field">🔒 Password</div>
+                    <div class="form-field">🔒 Confirm Password</div>
+                    <button class="button">Create Account</button>
+                    <button class="button secondary">Already have an account? Sign in</button>
+                </div>
+                <ul class="feature-list">
+                    <li><span class="check">✓</span> Form validation</li>
+                    <li><span class="check">✓</span> Password confirmation</li>
+                    <li><span class="check">✓</span> Navigation to login</li>
+                    <li><span class="check">✓</span> Auto sign-in after registration</li>
+                </ul>
+            </div>
+
+            <!-- Dashboard Screen -->
+            <div class="screen">
+                <h3><span class="screen-icon">📊</span> Dashboard Screen</h3>
+                <div class="mockup">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div class="avatar">TU</div>
+                        <h3 style="margin: 0;">Welcome, Test User!</h3>
+                        <p style="color: #6b7280; margin: 5px 0;">test@example.com</p>
+                    </div>
+                    <h4>Quick Actions</h4>
+                    <div class="grid">
+                        <div class="action-card">
+                            <div style="font-size: 2em;">🕐</div>
+                            <strong>Clock In</strong>
+                            <div>Mark your arrival</div>
+                        </div>
+                        <div class="action-card">
+                            <div style="font-size: 2em;">⏰</div>
+                            <strong>Clock Out</strong>
+                            <div>Mark your departure</div>
+                        </div>
+                        <div class="action-card">
+                            <div style="font-size: 2em;">📅</div>
+                            <strong>Schedule</strong>
+                            <div>Check your schedule</div>
+                        </div>
+                        <div class="action-card">
+                            <div style="font-size: 2em;">📊</div>
+                            <strong>Reports</strong>
+                            <div>View attendance reports</div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="feature-list">
+                    <li><span class="check">✓</span> User profile display</li>
+                    <li><span class="check">✓</span> Grid layout actions</li>
+                    <li><span class="check">✓</span> Logout functionality</li>
+                    <li><span class="check">✓</span> Coming soon dialogs</li>
+                </ul>
+            </div>
+
+            <!-- Features Overview -->
+            <div class="screen">
+                <h3><span class="screen-icon">🚀</span> Technical Features</h3>
+                <div class="mockup">
+                    <h4>Architecture</h4>
+                    <ul class="feature-list">
+                        <li><span class="check">✓</span> Clean Architecture with feature folders</li>
+                        <li><span class="check">✓</span> Provider pattern for state management</li>
+                        <li><span class="check">✓</span> Separation of UI and business logic</li>
+                        <li><span class="check">✓</span> Mock services ready for real backend</li>
+                    </ul>
+                    
+                    <h4>UI/UX</h4>
+                    <ul class="feature-list">
+                        <li><span class="check">✓</span> Material Design 3</li>
+                        <li><span class="check">✓</span> Responsive layout</li>
+                        <li><span class="check">✓</span> Dark/Light theme support</li>
+                        <li><span class="check">✓</span> Smooth animations</li>
+                    </ul>
+
+                    <h4>Authentication</h4>
+                    <ul class="feature-list">
+                        <li><span class="check">✓</span> Email/password authentication</li>
+                        <li><span class="check">✓</span> Registration with validation</li>
+                        <li><span class="check">✓</span> Password reset functionality</li>
+                        <li><span class="check">✓</span> Auto navigation based on auth state</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Test Instructions -->
+            <div class="screen">
+                <h3><span class="screen-icon">🧪</span> Testing Instructions</h3>
+                <div class="mockup">
+                    <div class="card">
+                        <h4>Mock Credentials</h4>
+                        <strong>Email:</strong> test@example.com<br>
+                        <strong>Password:</strong> test123
+                    </div>
+                    
+                    <h4>Test Scenarios</h4>
+                    <ul class="feature-list">
+                        <li><span class="check">1.</span> Launch app → See login screen</li>
+                        <li><span class="check">2.</span> Try invalid login → See error message</li>
+                        <li><span class="check">3.</span> Use mock credentials → Navigate to dashboard</li>
+                        <li><span class="check">4.</span> Test registration flow → Auto sign-in</li>
+                        <li><span class="check">5.</span> Test forgot password → Success message</li>
+                        <li><span class="check">6.</span> Test logout → Return to login</li>
+                    </ul>
+                    
+                    <h4>Commands</h4>
+                    <div style="background: #1f2937; color: #10b981; padding: 15px; border-radius: 6px; font-family: monospace;">
+                        flutter pub get<br>
+                        flutter run
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="screen">
+                <h3><span class="screen-icon">🎯</span> Production Ready Steps</h3>
+                <div class="mockup">
+                    <h4>Immediate (Ready to implement)</h4>
+                    <ul class="feature-list">
+                        <li><span style="color: #f59e0b;">⚡</span> Setup Supabase project</li>
+                        <li><span style="color: #f59e0b;">⚡</span> Replace mock auth with real Supabase</li>
+                        <li><span style="color: #f59e0b;">⚡</span> Add environment variables</li>
+                    </ul>
+                    
+                    <h4>Attendance Features</h4>
+                    <ul class="feature-list">
+                        <li><span style="color: #8b5cf6;">🏗️</span> Clock In/Out functionality</li>
+                        <li><span style="color: #8b5cf6;">🏗️</span> Location verification</li>
+                        <li><span style="color: #8b5cf6;">🏗️</span> Attendance history</li>
+                        <li><span style="color: #8b5cf6;">🏗️</span> Reports and analytics</li>
+                    </ul>
+                    
+                    <h4>Advanced Features</h4>
+                    <ul class="feature-list">
+                        <li><span style="color: #06b6d4;">🔮</span> Push notifications</li>
+                        <li><span style="color: #06b6d4;">🔮</span> Offline capability</li>
+                        <li><span style="color: #06b6d4;">🔮</span> Admin dashboard</li>
+                        <li><span style="color: #06b6d4;">🔮</span> Multi-tenant support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

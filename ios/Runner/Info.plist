@@ -44,6 +44,15 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs location access to track attendance at work facilities.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs location access to track attendance at work facilities.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>This app needs camera access for attendance verification photos.</string>
+    <!-- Rest of your Info.plist -->
+
 	<true/>
 </dict>
 </plist>

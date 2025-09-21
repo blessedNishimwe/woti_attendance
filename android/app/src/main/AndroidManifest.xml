@@ -42,4 +42,15 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    
+    <application
+        android:label="project_vision"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+    </application>
 </manifest>
