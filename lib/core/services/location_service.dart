@@ -2,6 +2,89 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../shared/models/location_models.dart';
 import '../../config/supabase_config.dart';
 
+// Simple LocationService for basic location operations
+class LocationService {
+  final SupabaseClient _supabase = SupabaseConfig.client;
+
+  Future<List<Facility>> getAllFacilities() async {
+    try {
+      final response = await _supabase
+          .from('facilities')
+          .select('''
+            *,
+            councils (
+              *,
+              regions (*)
+            )
+          ''')
+          .order('name');
+
+      return (response as List)
+          .map((item) => Facility.fromMap(item))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to get facilities: $e');
+    }
+  }
+
+  Future<Facility?> getFacilityById(String facilityId) async {
+    try {
+      final response = await _supabase
+          .from('facilities')
+          .select('''
+            *,
+            councils (
+              *,
+              regions (*)
+            )
+          ''')
+          .eq('id', facilityId)
+          .maybeSingle();
+
+      return response != null ? Facility.fromMap(response) : null;
+    } catch (e) {
+      throw Exception('Failed to get facility: $e');
+    }
+  }
+
+  Future<bool> isWithinFacilityRadius({
+    required String facilityId,
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final facility = await getFacilityById(facilityId);
+      if (facility == null) return false;
+
+      // Calculate distance using Haversine formula (simplified)
+      final distance = _calculateDistance(
+        latitude,
+        longitude,
+        facility.latitude,
+        facility.longitude,
+      );
+
+      return distance <= facility.radiusMeters;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    // Simplified distance calculation in meters
+    // In production, use a proper geolocation library
+    const double earthRadius = 6371000; // Earth radius in meters
+    final double dLat = (lat2 - lat1) * (3.14159 / 180);
+    final double dLon = (lon2 - lon1) * (3.14159 / 180);
+    
+    final double a = (dLat / 2) * (dLat / 2) +
+        (dLon / 2) * (dLon / 2) * (lat1 * 3.14159 / 180).cos() * (lat2 * 3.14159 / 180).cos();
+    final double c = 2 * (a.sqrt()).asin();
+    
+    return earthRadius * c;
+  }
+}
+
 class LocationHierarchyService {
   final SupabaseClient _supabase = SupabaseConfig.client;
 

@@ -1,3 +1,5 @@
+import 'location_models.dart';
+
 class AttendanceModel {
   final String id;
   final String userId;
